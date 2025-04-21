@@ -136,3 +136,80 @@ To extend or modify the services:
 ## Testing
 
 Each service can be tested independently using the FastAPI test client. The Swagger UI provides an interactive way to test all endpoints.
+
+
+## Service Integrations
+
+### Integration with External Microservices
+
+The system integrates with two external microservices developed by another team. These integrations streamline operations across employee management and vendor-related workflows via unified interfaces built in Streamlit.
+
+---
+
+### 1. Employee Salary Service Integration
+
+- **Integrated With**: Staff Service  
+- **Integration Point**: Combined API endpoints for employee salary management and staff registration  
+- **Interface**: Streamlit application [`salary.py`](salary.py)
+
+#### Features:
+- Unified form for registering staff and employees
+- Simultaneous data submission to both external and local services
+- **Common Fields**:
+  - `name`, `role`, `contact details`
+- **Salary-Specific Fields**:
+  - `employee_id`, `department_id`
+- **Staff-Specific Fields**:
+  - `specialization`, `years_of_experience`
+
+#### API Endpoints:
+- **Employee API**: `http://external-team-domain:3001/api/employees`  
+- **Staff API**: `http://localhost:8004/staff`
+
+---
+
+### 2. Vendor Payment Service Integration
+
+- **Integrated With**: Equipment Service  
+- **Integration Point**: Unified equipment purchase and vendor payment processing  
+- **Interface**: Streamlit application [`vendor.py`](vendor.py)
+
+#### Features:
+- Single interface for managing equipment purchases and vendor payments
+- Real-time creation of purchase orders
+- Automatic vendor payment initiation
+- Equipment inventory auto-updates post-purchase
+
+#### API Endpoints:
+- **Vendor API**: `http://external-team-domain:3004/api/purchase-orders`  
+- **Equipment API**: `http://localhost:8001/equipment`
+
+---
+
+### Using the Integrated Services
+
+#### Staff-Employee Integration
+```bash
+streamlit run salary.py
+```
+- Access the unified form at: http://localhost:8501  
+- Fill in both staff and employee details  
+- Submit the form to create records in both systems  
+
+#### Equipment-Vendor Integration
+```bash
+streamlit run vendor.py
+```
+- Access the purchase interface at: http://localhost:8502  
+- Create purchase orders for new equipment  
+- Track vendor payments and inventory updates automatically  
+
+---
+
+### Integration Benefits
+
+- Streamlined data entry processes  
+- Elimination of duplicate records  
+- Consistent and synchronized data across systems  
+- Improved operational efficiency  
+- Real-time updates to both internal and external services
