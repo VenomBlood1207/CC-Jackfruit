@@ -6,22 +6,22 @@ A microservices-based system for managing a sports academy, built with FastAPI a
 
 The system consists of four microservices:
 
-1. **Staff Service** (Port 8000)
+1. **Staff Service** (Port 8001)
    - Manages staff members
    - Handles staff information and specializations
    - Role-based staff management
 
-2. **Equipment Service** (Port 8001)
+2. **Equipment Service** (Port 8002)
    - Manages sports equipment inventory
    - Handles court bookings and maintenance
    - Tracks equipment condition and availability
 
-3. **Gym Subscription Service** (Port 8002)
+3. **Gym Subscription Service** (Port 8003)
    - Manages member subscriptions
    - Handles membership types and renewals
    - Payment status tracking
 
-4. **Sports Coaching Service** (Port 8003)
+4. **Sports Coaching Service** (Port 8004)
    - Manages coaching sessions
    - Handles coach schedules
    - Session booking and tracking
