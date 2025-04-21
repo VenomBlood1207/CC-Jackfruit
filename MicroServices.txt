@@ -1,0 +1,4 @@
+1.Sports dept Staff Management Service :- we know that each dept cannot run with realising the amount of workforce it has, and 
+2.Court/Equipment Management Service:- Basically like Inventory management where keeping count of how many courts(say 2 badminton courts, 1 basketball court, 3 volleyball courts) we have and also no of sports equipment(like the equipment needed to play sports like volleyball and badminton and basketball. for now consider only 3 sports badminton, volleyball and basketball.
+3.Gym Subscription Service:- Types of packages that the Gym offers and also fees per month. 
+4.Sports Coaching Service:- which coach/Staff member specializes in what and what they are able to teach best. Also giving information like when the coaching services will be held(like no of days and time) and hourly/monthly fees per individual.for now consider only 3 sports are available for coaching badminton, volleyball and basketball.

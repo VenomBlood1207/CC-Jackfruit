@@ -1,0 +1,11 @@
+# Service specific dependencies can be added here
+fastapi>=0.68.0
+uvicorn>=0.15.0
+SQLAlchemy>=1.4.0
+psycopg2-binary>=2.9.1
+python-dotenv>=0.19.0
+pydantic>=1.8.0
+alembic>=1.7.0
+pytest>=6.2.4
+httpx>=0.18.2
+email-validator==2.1.0

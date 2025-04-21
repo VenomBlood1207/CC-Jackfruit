@@ -1,0 +1,98 @@
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./shared:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_STAFF_DB=staff_service
+      - POSTGRES_EQUIPMENT_DB=equipment_service
+      - POSTGRES_GYM_SUBSCRIPTION_DB=gym_subscription_service
+      - POSTGRES_SPORTS_COACHING_DB=sports_coaching_service
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - virtual-labs-network
+
+  staff_service:
+    build: 
+      context: .
+      dockerfile: staff_service/Dockerfile
+    ports:
+      - "8004:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - STAFF_SERVICE_DB_HOST=db
+      - STAFF_SERVICE_DB_NAME=staff_service
+      - STAFF_SERVICE_DB_USER=postgres
+      - STAFF_SERVICE_DB_PASSWORD=postgres
+    networks:
+      - virtual-labs-network
+
+  equipment_service:
+    build:
+      context: .
+      dockerfile: equipment_service/Dockerfile
+    ports:
+      - "8001:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - EQUIPMENT_SERVICE_DB_HOST=db
+      - EQUIPMENT_SERVICE_DB_NAME=equipment_service
+      - EQUIPMENT_SERVICE_DB_USER=postgres
+      - EQUIPMENT_SERVICE_DB_PASSWORD=postgres
+    networks:
+      - virtual-labs-network
+
+  gym_subscription_service:
+    build:
+      context: .
+      dockerfile: gym_subscription_service/Dockerfile
+    ports:
+      - "8002:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - GYM_SUBSCRIPTION_SERVICE_DB_HOST=db
+      - GYM_SUBSCRIPTION_SERVICE_DB_NAME=gym_subscription_service
+      - GYM_SUBSCRIPTION_SERVICE_DB_USER=postgres
+      - GYM_SUBSCRIPTION_SERVICE_DB_PASSWORD=postgres
+    networks:
+      - virtual-labs-network
+
+  sports_coaching_service:
+    build:
+      context: .
+      dockerfile: sports_coaching_service/Dockerfile
+    ports:
+      - "8003:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - SPORTS_COACHING_SERVICE_DB_HOST=db
+      - SPORTS_COACHING_SERVICE_DB_NAME=sports_coaching_service
+      - SPORTS_COACHING_SERVICE_DB_USER=postgres
+      - SPORTS_COACHING_SERVICE_DB_PASSWORD=postgres
+    networks:
+      - virtual-labs-network
+
+volumes:
+  postgres_data:
+
+networks:
+  virtual-labs-network:
+    name: virtual-labs-network
+    driver: bridge
