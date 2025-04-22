@@ -25,7 +25,7 @@ with st.form("combined_form"):
     department_id = st.text_input("Department ID (UUID)")
     employee_id = st.text_input("Employee ID")
     role = st.text_input("Role / Position")
-    specialization = st.selectbox("Specialization", ["badminton", "tennis", "football", "yoga", "other"])
+    specialization = st.selectbox("Specialization", ["badminton", "volleyball", "basketball"])
     date_of_birth = st.date_input("Date of Birth")
     hire_date = st.date_input("Hire Date")
     contact_number = st.text_input("Contact Number")
