@@ -6,6 +6,19 @@ from datetime import date, datetime
 PURCHASE_ORDER_API = "https://ccproject.navisto.cloud/v1/vendor/api/purchase-orders"
 EQUIPMENT_API = "http://10.20.203.157:8001/equipment"
 
+# Friendly error messages
+friendly_errors = {
+    400: "Oops! The request was not correct. Please double-check the form details.",
+    401: "You're not authorized to do this. Please check your credentials or login again.",
+    403: "Permission denied. You might not have the rights to perform this action.",
+    404: "The server couldn’t find what you’re looking for. Try again later.",
+    500: "Server had a hiccup! Try again in a bit.",
+    503: "Service is currently unavailable. Please wait a few moments and retry.",
+}
+
+def get_friendly_message(status_code):
+    return friendly_errors.get(status_code, "Something went wrong. Please try again later.")
+
 # Helper to fetch equipment names from friend's API
 @st.cache_data
 def fetch_equipment_names():
@@ -103,12 +116,8 @@ if st.button("✅ Submit Purchase Order"):
     }
 
     try:
-        # Submit Purchase Order
         response_po = requests.post(PURCHASE_ORDER_API, json=po_payload)
         if response_po.status_code in [200, 201]:
-            st.success("✅ Purchase order submitted successfully!")
-
-            # Submit Equipment Items
             equipment_success = []
             for eq in equipment_items:
                 try:
@@ -116,13 +125,12 @@ if st.button("✅ Submit Purchase Order"):
                     if res.status_code in [200, 201]:
                         equipment_success.append(eq["name"])
                     else:
-                        st.warning(f"⚠️ Failed to post {eq['name']} to /equipment (Status {res.status_code})")
-                except Exception as ex:
-                    st.error(f"❌ Error posting to /equipment: {eq['name']} - {ex}")
+                        st.warning(f"⚠️ Could not add '{eq['name']}' to the equipment list. {get_friendly_message(res.status_code)}")
+                except Exception:
+                    st.error(f"❌ Something went wrong while adding '{eq['name']}'. Please try again.")
 
-            if equipment_success:
-                st.success("📦 Equipment items added: " + ", ".join(equipment_success))
+            st.success("✅ Success!")
         else:
-            st.error(f"❌ Failed to submit PO: {response_po.status_code} - {response_po.text}")
-    except Exception as e:
-        st.error(f"🔥 Error occurred: {str(e)}")
+            st.error(f"❌ Could not submit purchase order. {get_friendly_message(response_po.status_code)}")
+    except Exception:
+        st.error("🔥 There was a network or connection problem. Please check your internet or try again later.")
