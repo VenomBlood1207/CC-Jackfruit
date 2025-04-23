@@ -62,22 +62,49 @@ with st.form("combined_form"):
             "years_of_experience": years_of_experience
         }
 
+        # Friendly error messages
+        friendly_errors = {
+            "connection": "Couldn't connect to the server. Please check your internet or try again later.",
+            "timeout": "The request took too long. Please try again after some time.",
+            "invalid_data": "Something was wrong with the information entered. Please check the fields and try again.",
+            "unknown": "An unexpected error occurred. Please contact support if this continues.",
+        }
+
+        emp_success = False
+        staff_success = False
+
         # Send to Employee API
         try:
-            emp_response = requests.post("https://ccproject.navisto.cloud/v1/employee/api/employees", json=emp_payload)
+            emp_response = requests.post("https://ccproject.navisto.cloud/v1/employee/api/employees", json=emp_payload, timeout=10)
             if emp_response.status_code in [200, 201]:
-                st.success("✅ Employee added successfully!")
+                emp_success = True
             else:
-                st.error(f"❌ Employee API error: {emp_response.text}")
-        except Exception as e:
-            st.error(f"🚨 Error connecting to Employee API: {e}")
+                st.error("❌ Couldn't add the employee. Please make sure all fields are correctly filled.")
+        except requests.exceptions.ConnectionError:
+            st.error(f"🚨 {friendly_errors['connection']}")
+        except requests.exceptions.Timeout:
+            st.error(f"⏳ {friendly_errors['timeout']}")
+        except requests.exceptions.RequestException:
+            st.error(f"⚠️ {friendly_errors['invalid_data']}")
+        except Exception:
+            st.error(f"😕 {friendly_errors['unknown']}")
 
         # Send to Staff API
         try:
-            staff_response = requests.post("http://10.20.203.157:8004/staff", json=staff_payload)
+            staff_response = requests.post("http://10.20.203.157:8004/staff", json=staff_payload, timeout=10)
             if staff_response.status_code in [200, 201]:
-                st.success("✅ Staff added successfully!")
+                staff_success = True
             else:
-                st.error(f"❌ Staff API error: {staff_response.text}")
-        except Exception as e:
-            st.error(f"🚨 Error connecting to Staff API: {e}")
+                st.error("❌ Couldn't add the staff member. Please check the inputs and try again.")
+        except requests.exceptions.ConnectionError:
+            st.error(f"🚨 {friendly_errors['connection']}")
+        except requests.exceptions.Timeout:
+            st.error(f"⏳ {friendly_errors['timeout']}")
+        except requests.exceptions.RequestException:
+            st.error(f"⚠️ {friendly_errors['invalid_data']}")
+        except Exception:
+            st.error(f"😕 {friendly_errors['unknown']}")
+
+        # Show single success message if both succeeded
+        if emp_success and staff_success:
+            st.success("✅ Success!")
