@@ -3,8 +3,8 @@ import requests
 from datetime import date, datetime
 
 # API endpoints
-PURCHASE_ORDER_API = "http://10.14.147.239:3004/api/purchase-orders"
-EQUIPMENT_API = "http://10.14.147.179:8001/equipment"
+PURCHASE_ORDER_API = "https://ccproject.navisto.cloud/v1/vendor/api/purchase-orders"
+EQUIPMENT_API = "http://10.20.203.157:8001/equipment"
 
 # Helper to fetch equipment names from friend's API
 @st.cache_data
