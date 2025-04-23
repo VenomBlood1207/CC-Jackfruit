@@ -64,7 +64,7 @@ with st.form("combined_form"):
 
         # Send to Employee API
         try:
-            emp_response = requests.post("http://10.14.147.239:3001/api/employees", json=emp_payload)
+            emp_response = requests.post("https://ccproject.navisto.cloud/v1/employee/api/employees", json=emp_payload)
             if emp_response.status_code in [200, 201]:
                 st.success("✅ Employee added successfully!")
             else:
@@ -74,7 +74,7 @@ with st.form("combined_form"):
 
         # Send to Staff API
         try:
-            staff_response = requests.post("http://10.14.147.179:8004/staff", json=staff_payload)
+            staff_response = requests.post("http://10.20.203.157:8004/staff", json=staff_payload)
             if staff_response.status_code in [200, 201]:
                 st.success("✅ Staff added successfully!")
             else:
